@@ -1,0 +1,11 @@
+<ehcache>
+    <cache name="divisionsCache"
+           maxEntriesLocalHeap="100"
+           timeToLiveSeconds="600"/>
+    <cache name="teamsCache"
+           maxEntriesLocalHeap="100"
+           timeToLiveSeconds="600"/>
+    <cache name="usersCache"
+           maxEntriesLocalHeap="100"
+           timeToLiveSeconds="600"/>
+</ehcache>
