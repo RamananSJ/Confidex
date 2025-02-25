@@ -1,7 +1,10 @@
 package com.Ramanan.Project.Service;
 
 import com.Ramanan.Project.Model.Team;
+import com.Ramanan.Project.Model.User;
 import com.Ramanan.Project.Repository.TeamRepository;
+import com.Ramanan.Project.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
@@ -13,9 +16,11 @@ import java.util.List;
 @EnableCaching
 public class TeamService {
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
 
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, UserRepository userRepository) {
         this.teamRepository = teamRepository;
+        this.userRepository = userRepository;
     }
 
     @Cacheable(value = "teamsCache")
@@ -41,6 +46,20 @@ public class TeamService {
     @CacheEvict(value = "teamsCache", allEntries = true)
     public void deleteTeam(Long id) {
         teamRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void removeUserFromTeam(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Team team = user.getTeam();
+
+        if (team != null) {
+            team.setStrength(team.getStrength() - 1);
+            teamRepository.save(team);
+        }
+
+        user.setTeam(null);
+        userRepository.save(user);
     }
 
 }

@@ -16,6 +16,9 @@ public class Team {
 
     private String name;
 
+    @Column(nullable = false, columnDefinition = "int default 15")
+    private int strength = 15;
+
     @ManyToOne
     @JoinColumn(name = "division_id")
     private Division division;

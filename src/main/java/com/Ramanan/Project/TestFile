@@ -1,0 +1,209 @@
+//Team Service
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.Ramanan.Project.Model.Team;
+import com.Ramanan.Project.Repository.TeamRepository;
+import com.Ramanan.Project.Service.TeamService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
+
+class TeamServiceTest {
+
+    @Mock
+    private TeamRepository teamRepository;
+
+    @InjectMocks
+    private TeamService teamService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetTeamById_Success() {
+        Team team = new Team();
+        team.setId(1L);
+        team.setName("Alpha");
+
+        when(teamRepository.findById(1L)).thenReturn(Optional.of(team));
+
+        Team result = teamService.getTeamById(1L);
+        assertNotNull(result);
+        assertEquals("Alpha", result.getName());
+    }
+
+    @Test
+    void testGetTeamById_NotFound() {
+        when(teamRepository.findById(2L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> teamService.getTeamById(2L));
+    }
+
+    @Test
+    void testSaveTeam() {
+        Team team = new Team();
+        team.setName("Beta");
+
+        when(teamRepository.save(any(Team.class))).thenReturn(team);
+
+        Team savedTeam = teamService.createTeam(team);
+        assertNotNull(savedTeam);
+        assertEquals("Beta", savedTeam.getName());
+    }
+
+    @Test
+    void testDeleteTeam() {
+        doNothing().when(teamRepository).deleteById(1L);
+
+        assertDoesNotThrow(() -> teamService.deleteTeam(1L));
+        verify(teamRepository, times(1)).deleteById(1L);
+    }
+}
+
+
+//User Service
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.Ramanan.Project.Model.User;
+import com.Ramanan.Project.Repository.UserRepository;
+import com.Ramanan.Project.Service.UserService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
+
+class UserServiceTest {
+
+    @Mock
+    private UserRepository userRepository;
+
+    @InjectMocks
+    private UserService userService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetUserById_Success() {
+        User user = new User();
+        user.setId(1L);
+        user.setName("John Doe");
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        User result = userService.getUserById(1L);
+        assertNotNull(result);
+        assertEquals("John Doe", result.getName());
+    }
+
+    @Test
+    void testGetUserById_NotFound() {
+        when(userRepository.findById(2L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> userService.getUserById(2L));
+    }
+
+    @Test
+    void testSaveUser() {
+        User user = new User();
+        user.setName("Alice");
+
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
+        User savedUser = userService.createUser(user);
+        assertNotNull(savedUser);
+        assertEquals("Alice", savedUser.getName());
+    }
+
+    @Test
+    void testDeleteUser() {
+        doNothing().when(userRepository).deleteById(1L);
+
+        assertDoesNotThrow(() -> userService.deleteUser(1L));
+        verify(userRepository, times(1)).deleteById(1L);
+    }
+}
+
+
+//Division Service
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import com.Ramanan.Project.Model.Division;
+import com.Ramanan.Project.Repository.DivisionRepository;
+import com.Ramanan.Project.Service.DivisionService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
+
+class DivisionServiceTest {
+
+    @Mock
+    private DivisionRepository divisionRepository;
+
+    @InjectMocks
+    private DivisionService divisionService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetDivisionById_Success() {
+        Division division = new Division();
+        division.setId(1L);
+        division.setName("Engineering");
+
+        when(divisionRepository.findById(1L)).thenReturn(Optional.of(division));
+
+        Division result = divisionService.getDivisionById(1L);
+        assertNotNull(result);
+        assertEquals("Engineering", result.getName());
+    }
+
+    @Test
+    void testGetDivisionById_NotFound() {
+        when(divisionRepository.findById(2L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> divisionService.getDivisionById(2L));
+    }
+
+    @Test
+    void testSaveDivision() {
+        Division division = new Division();
+        division.setName("HR");
+
+        when(divisionRepository.save(any(Division.class))).thenReturn(division);
+
+        Division savedDivision = divisionService.createDivision(division);
+        assertNotNull(savedDivision);
+        assertEquals("HR", savedDivision.getName());
+    }
+
+    @Test
+    void testDeleteDivision() {
+        doNothing().when(divisionRepository).deleteById(1L);
+
+        assertDoesNotThrow(() -> divisionService.deleteDivision(1L));
+        verify(divisionRepository, times(1)).deleteById(1L);
+    }
+}
